@@ -1,0 +1,51 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure GitHub update channel
+        run: npm run configure-release
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Build Windows installer
+        if: startsWith(github.ref, 'refs/tags/')
+        run: npm run release:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build test installer
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        run: npm run dist:win
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pawnshop-krabi-windows-installer
+          path: |
+            dist/*.exe
+            dist/*.yml
+            dist/*.blockmap
+          if-no-files-found: error
+          retention-days: 30

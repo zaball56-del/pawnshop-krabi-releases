@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ตั้งค่าโปรแกรมบัญชี</title>
+  <style>
+    :root{font-family:"Sarabun",Tahoma,sans-serif;color:#0f172a;background:#f1f5f9;font-synthesis:none}
+    *{box-sizing:border-box}body{margin:0;padding:22px;background:linear-gradient(135deg,#ecfdf5,#f1f5f9 45%,#e2e8f0);min-height:100vh}
+    .wrap{max-width:760px;margin:0 auto}.hero{background:#064e3b;color:white;border-radius:18px;padding:22px 24px;box-shadow:0 10px 28px #064e3b22}
+    .hero h1{font-size:22px;margin:0 0 5px}.hero p{margin:0;color:#bbf7d0;font-size:13px}.version{display:inline-block;margin-top:13px;background:#065f46;border:1px solid #34d399;border-radius:99px;padding:5px 11px;font-size:12px}
+    .card{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:18px;margin-top:14px;box-shadow:0 3px 12px #0f172a08}.card h2{font-size:16px;margin:0 0 13px;display:flex;align-items:center;gap:8px}.muted{color:#64748b;font-size:12px;line-height:1.6}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.row+.row{margin-top:12px}label{font-size:13px;font-weight:700}select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;background:white;font:inherit;font-size:13px;margin-top:7px}
+    button{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;background:#047857;color:white}button.secondary{background:#e2e8f0;color:#334155}button.warning{background:#b45309;color:white}button:disabled{opacity:.5;cursor:not-allowed}
+    .field{margin:12px 0}.status{border-radius:11px;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}.status.success{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}.status.error{background:#fff1f2;border-color:#fecdd3;color:#9f1239}.status.pending{background:#fffbeb;border-color:#fde68a;color:#92400e}
+    .switchline{display:flex;align-items:center;gap:10px;font-size:13px}.switchline input{width:18px;height:18px;accent-color:#047857}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.note{padding:11px;border-left:3px solid #0d9488;background:#f0fdfa;color:#115e59;border-radius:7px;font-size:12px;line-height:1.65;margin-top:12px}.path{font:11px Consolas,monospace;color:#475569;word-break:break-all;background:#f8fafc;padding:8px;border-radius:8px;margin-top:7px}
+    .foot{font-size:11px;color:#64748b;text-align:center;padding:20px 8px}
+    @media(max-width:540px){body{padding:12px}.hero{padding:18px}.hero h1{font-size:19px}.card{padding:15px}.row button{flex:1}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>ตั้งค่าโปรแกรมบัญชี</h1>
+      <p>สถานธนานุบาลเทศบาลเมืองกระบี่ · โปรแกรม Windows 11</p>
+      <span class="version" id="app-version">กำลังอ่านเวอร์ชัน…</span>
+    </section>
+
+    <section class="card">
+      <h2>🛡️ สำรองข้อมูล USB อัตโนมัติ</h2>
+      <label class="switchline"><input id="usb-enabled" type="checkbox"> เปิดระบบสำรองข้อมูล USB อัตโนมัติ</label>
+      <div class="field">
+        <label for="usb-drive">เลือก USB ที่จะใช้สำรองข้อมูล</label>
+        <select id="usb-drive"><option value="">กำลังค้นหา USB…</option></select>
+      </div>
+      <div class="row">
+        <button id="refresh-drives" class="secondary">ค้นหา USB อีกครั้ง</button>
+        <button id="save-usb">บันทึก USB นี้</button>
+      </div>
+      <div id="backup-status" class="status">กำลังตรวจสอบสถานะการสำรองข้อมูล…</div>
+      <div class="actions">
+        <button id="backup-now">สำรองข้อมูลทันที</button>
+        <button id="restore-backup" class="warning">กู้คืนจากไฟล์สำรอง</button>
+      </div>
+      <div class="note">เมื่อปิดหน้าต่างโปรแกรมด้วยปุ่ม X โปรแกรมจะย่อลงไปทำงานที่ System Tray ใกล้นาฬิกา Windows เพื่อรอ USB และสำรองข้อมูลต่อไป ต้องเลือก USB ที่ต้องการไว้ก่อน และไม่ควรใช้คำสั่ง “ออกจากโปรแกรมทั้งหมด” หากต้องการให้ตรวจจับ USB ต่อเนื่อง</div>
+    </section>
+
+    <section class="card">
+      <h2>📦 นำเข้าข้อมูลจากโปรแกรมเดิม</h2>
+      <p class="muted">ข้อมูลในเว็บเดิมที่อยู่บน Vercel ไม่ได้ย้ายเข้ามาเอง เพราะข้อมูลนั้นอยู่ในพื้นที่จัดเก็บของเบราว์เซอร์ ให้เปิดเว็บเดิมแล้วกด “สำรองระบบ (.json)” จากนั้นเลือกไฟล์ผ่านปุ่มด้านล่าง ระบบจะใช้ฟังก์ชันนำเข้าของต้นฉบับและเก็บจุดกู้คืนให้ก่อนแทนที่ข้อมูล</p>
+      <div class="actions"><button id="import-legacy" class="secondary">เลือกไฟล์ JSON จากเว็บเดิม</button></div>
+      <div class="muted" id="legacy-status"></div>
+    </section>
+
+    <section class="card">
+      <h2>🔄 การอัปเดตโปรแกรม</h2>
+      <p class="muted">เมื่อเชื่อมระบบเผยแพร่เวอร์ชันผ่าน GitHub Releases แล้ว โปรแกรมจะตรวจสอบเวอร์ชันใหม่และดาวน์โหลดอัปเดตได้ โดยไม่ลบฐานข้อมูลที่เก็บแยกไว้</p>
+      <div id="update-status" class="status">ยังไม่ได้ตรวจสอบการอัปเดต</div>
+      <div class="actions">
+        <button id="check-updates">ตรวจสอบเวอร์ชันใหม่</button>
+        <button id="install-update" class="warning" disabled>เริ่มติดตั้งอัปเดต</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>⚙️ การทำงานของ Windows</h2>
+      <label class="switchline"><input id="startup-enabled" type="checkbox"> เปิดตัวช่วยสำรองข้อมูลอัตโนมัติเมื่อเข้า Windows</label>
+      <p class="muted">เปิดไว้เพื่อให้โปรแกรมอยู่ใน System Tray หลังเปิดเครื่อง แม้ยังไม่ได้เปิดหน้าบัญชี ก็จะรอตรวจจับ USB ที่เลือกไว้</p>
+      <div class="muted">ตำแหน่งข้อมูลภายในเครื่อง</div>
+      <div id="data-path" class="path">กำลังอ่าน…</div>
+    </section>
+    <div class="foot">ข้อมูลบัญชีเก็บในเครื่องนี้ · ไม่ส่งฐานข้อมูลไปยังเซิร์ฟเวอร์ออนไลน์</div>
+  </main>
+  <script src="./settings.js"></script>
+</body>
+</html>

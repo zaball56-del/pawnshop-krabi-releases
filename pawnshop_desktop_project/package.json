@@ -1,0 +1,71 @@
+{
+  "name": "pawnshop-krabi-desktop",
+  "version": "1.1.0",
+  "description": "Windows desktop ledger application for Krabi Municipal Pawnshop",
+  "author": "Pawnshop Krabi",
+  "license": "UNLICENSED",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "npm run vendor-assets && electron .",
+    "vendor-assets": "node scripts/vendor-assets.mjs",
+    "configure-release": "node scripts/configure-release.mjs",
+    "check": "node scripts/check-project.mjs",
+    "dist:win": "npm run vendor-assets && electron-builder --win nsis --x64 --publish never",
+    "release:win": "npm run vendor-assets && electron-builder --win nsis --x64 --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "6.8.12"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.1"
+  },
+  "build": {
+    "appId": "th.go.krabi.pawnshop.ledger",
+    "productName": "สถานธนานุบาลเทศบาลเมืองกระบี่",
+    "asar": true,
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "assets/app.ico",
+      "package.json",
+      "!renderer/vendor/.gitkeep"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/app.ico",
+      "artifactName": "Pawnshop-Krabi-Setup-${version}.${ext}",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "สถานธนานุบาลเทศบาลเมืองกระบี่",
+      "deleteAppDataOnUninstall": false,
+      "differentialPackage": false
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "REPLACE_WITH_GITHUB_OWNER",
+        "repo": "pawnshop-krabi-desktop",
+        "releaseType": "release"
+      }
+    ]
+  }
+}

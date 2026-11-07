@@ -1,0 +1,7 @@
+node_modules/
+dist/
+release/
+renderer/vendor/*.js
+renderer/vendor/*.map
+.DS_Store
+*.log
