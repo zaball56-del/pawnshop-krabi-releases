@@ -12,6 +12,9 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: pawnshop_desktop_project
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -44,8 +47,8 @@ jobs:
         with:
           name: pawnshop-krabi-windows-installer
           path: |
-            dist/*.exe
-            dist/*.yml
-            dist/*.blockmap
+            pawnshop_desktop_project/dist/*.exe
+            pawnshop_desktop_project/dist/*.yml
+            pawnshop_desktop_project/dist/*.blockmap
           if-no-files-found: error
           retention-days: 30
